@@ -31,10 +31,12 @@ function plotsfunction(id) {
                 tickmode:"linear",
             },
         };
-
         // create the bar plot
     Plotly.newPlot("bar", data, layout);
-        // The bubble chart
+
+
+        // create bubble chart 
+    
         var trace1 = {
             x: sampledata.samples[0].otu_ids,
             y: sampledata.samples[0].sample_values,
@@ -50,8 +52,6 @@ function plotsfunction(id) {
         // set the layout for the bubble plot
         var layout_2 = {
             xaxis:{title: "OTU ID"},
-            height: 600,
-            width: 1000
         };
 
         // creating data variable 
@@ -62,14 +62,12 @@ function plotsfunction(id) {
     
     });
 }  
-// create the function to get the necessary data
-function getDemoInfo(id) {
+// create the function to get the  data for demographic infomation 
+function demoinfo(id) {
 // read the json file to get data
     d3.json("samples.json").then((data)=> {
 // get the metadata info for the demographic panel
         var metadata = data.metadata;
-
-        console.log(metadata)
 
       // filter meta data info by id
        var result = metadata.filter(meta => meta.id.toString() === id)[0];
@@ -88,26 +86,24 @@ function getDemoInfo(id) {
 // create the function for the change event
 function optionChanged(id) {
     plotsfunction(id);
-    getDemoInfo(id);
+    demoinfo(id);
 }
 
-// create the function for the initial data rendering
+// create the function for the initial data 
 function init() {
     // select dropdown menu 
     var dropdown = d3.select("#selDataset");
 
     // read the data 
     d3.json("samples.json").then((data)=> {
-        console.log(data)
-
-        // get the id data to the dropdwown menu
+        // select ID dropdown
         data.names.forEach(function(name) {
             dropdown.append("option").text(name).property("value");
         });
 
         // call the functions to display the data and the plots to the page
         plotsfunction(data.names[0]);
-        getDemoInfo(data.names[0]);
+        demoinfo(data.names[0]);
     });
 }
 
